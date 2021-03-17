@@ -21,8 +21,10 @@ class splash_screen : AppCompatActivity() {
 
         val firstPokemon = intent.getIntExtra("firstPoke", 1)
         val lastPokemon = intent.getIntExtra("lastPoke", 151)
+        loading.max = lastPokemon - firstPokemon
 
         Thread(Runnable {
+
                 PokemonSingleton.listaPokemon.clear()
                 receberPokemons(firstPokemon, lastPokemon)
 
@@ -57,8 +59,11 @@ class splash_screen : AppCompatActivity() {
 
                     val pokemonEscolhido = gson.fromJson(body, Pokemon::class.java)
 
-                    PokemonSingleton.listaPokemon[pokemonEscolhido.id] = pokemonEscolhido
+                    PokemonSingleton.listaPokemon.add(pokemonEscolhido)
+
                     loading.progress = PokemonSingleton.listaPokemon.size
+                    runOnUiThread { txtLoading.text = "Carregando pokemon: ${pokemonEscolhido.name.capitalize()}" }
+
                     Log.d("POkemon", pokemonEscolhido.name)
                     Log.d("tamanho", "${PokemonSingleton.listaPokemon.size}")
                 }

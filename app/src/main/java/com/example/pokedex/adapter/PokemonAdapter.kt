@@ -21,7 +21,7 @@ import java.lang.reflect.Type
 
 class PokemonAdapter(
     private val context : Context,
-    private val generation : Int
+    private val listaPokemon: List<Pokemon?>
 ) : RecyclerView.Adapter<PokemonViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
@@ -29,43 +29,11 @@ class PokemonAdapter(
         return PokemonViewHolder(view)
     }
 
-    override fun getItemCount(): Int = PokemonSingleton.listaPokemon.size
+    override fun getItemCount(): Int = listaPokemon.size
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
         val view = holder.itemView
-        var pokemon : Pokemon? = null
-
-
-        when (generation){
-            1 -> {
-                pokemon = PokemonSingleton.listaPokemon[position+1]
-            }
-            2 -> {
-                pokemon = PokemonSingleton.listaPokemon[position+152]
-            }
-            3 -> {
-                pokemon = PokemonSingleton.listaPokemon[position+252]
-            }
-            4 -> {
-                pokemon = PokemonSingleton.listaPokemon[position+387]
-            }
-            5 -> {
-                pokemon = PokemonSingleton.listaPokemon[position+494]
-            }
-            6 -> {
-                pokemon = PokemonSingleton.listaPokemon[position+650]
-            }
-            7 -> {
-                pokemon = PokemonSingleton.listaPokemon[position+722]
-            }
-            8 -> {
-                pokemon = PokemonSingleton.listaPokemon[position+810]
-            }
-        }
-
-        if(generation == 1 && position+1 >= 90) {
-            pokemon = PokemonSingleton.listaPokemon[position+2]
-        }
+        var pokemon = listaPokemon[position]
 
 
         val pokemonTypeCount = pokemon?.types?.size
