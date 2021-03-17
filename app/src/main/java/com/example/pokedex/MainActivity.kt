@@ -22,15 +22,17 @@ class MainActivity : AppCompatActivity() {
 
         setupRecyclerView()
 
-        refresh.setOnClickListener {
-            finish()
-            startActivity(intent)
-        }
+
     }
 
     private fun setupRecyclerView() {
         val adapter = PokemonAdapter(baseContext)
         recyclerViewPokemon.layoutManager = LinearLayoutManager(this)
         recyclerViewPokemon.adapter = adapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupRecyclerView()
     }
 }

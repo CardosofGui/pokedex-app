@@ -7,6 +7,7 @@ import android.util.Log
 import com.example.pokedex.model.Pokemon
 import com.example.pokedex.singleton.PokemonSingleton
 import com.google.gson.GsonBuilder
+import kotlinx.android.synthetic.main.activity_splash_screen.*
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -21,22 +22,19 @@ class splash_screen : AppCompatActivity() {
 
         Thread(Runnable {
 
-                while (PokemonSingleton.listaPokemon.size != 149) {
-                    receberPokemons()
-                }
-
-
+                receberPokemons()
 
             runOnUiThread {
                 val intent = Intent(baseContext, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             }
         }).start()
     }
 
     fun receberPokemons() {
 
-        for (i in 1..150){
+        for (i in 1..151){
             if(i == 90) { continue }
             val url = "https://pokeapi.co/api/v2/pokemon/${i}"
 
@@ -55,10 +53,12 @@ class splash_screen : AppCompatActivity() {
                     val pokemonEscolhido = gson.fromJson(body, Pokemon::class.java)
 
                     PokemonSingleton.listaPokemon[pokemonEscolhido.id] = pokemonEscolhido
+                    loading.progress = PokemonSingleton.listaPokemon.size
                     Log.d("POkemon", pokemonEscolhido.name)
                     Log.d("tamanho", "${PokemonSingleton.listaPokemon.size}")
                 }
             })
         }
     }
+
 }

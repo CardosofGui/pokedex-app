@@ -29,23 +29,23 @@ class PokemonAdapter(
         return PokemonViewHolder(view)
     }
 
-    override fun getItemCount(): Int = PokemonSingleton.listaPokemon.size+1
+    override fun getItemCount(): Int = PokemonSingleton.listaPokemon.size
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
         val view = holder.itemView
-        val pokemon = PokemonSingleton.listaPokemon[position+1]
+        var pokemon = PokemonSingleton.listaPokemon[position+1]
 
-        if(pokemon?.id == null){
-            var params = LinearLayout.LayoutParams(0, 0)
-            view.llnPokemon.layoutParams = params
+        if(position+1 >= 90){
+            pokemon = PokemonSingleton.listaPokemon[position+2]
         }
+
 
         val pokemonTypeCount = pokemon?.types?.size
         var pokemonTypeMain = pokemon?.types?.get(0)?.type?.name
         var pokemonTypeSecondary : String
 
         if(pokemonTypeCount == 2){
-            pokemonTypeSecondary = pokemon?.types?.get(1)?.type?.name
+            pokemonTypeSecondary = pokemon?.types?.get(1)?.type?.name.toString()
             view.typePokemon2.visibility = View.VISIBLE
 
             TypeEnum.values().forEach {
