@@ -1,6 +1,9 @@
 package com.example.pokedex.application
 
+import android.app.AlertDialog
 import android.app.Application
+import android.view.LayoutInflater
+import android.view.View
 import com.example.pokedex.model.Pokemon
 import com.example.pokedex.singleton.PokemonSingleton
 import com.google.gson.GsonBuilder
@@ -20,6 +23,4 @@ class PokemonApplication : Application(){
         super.onCreate()
         instance = this
     }
-
-
 }

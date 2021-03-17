@@ -20,8 +20,8 @@ import kotlinx.android.synthetic.main.pokemon_grid.view.*
 import java.lang.reflect.Type
 
 class PokemonAdapter(
-    private val context : Context
-
+    private val context : Context,
+    private val generation : Int
 ) : RecyclerView.Adapter<PokemonViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
@@ -33,9 +33,37 @@ class PokemonAdapter(
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
         val view = holder.itemView
-        var pokemon = PokemonSingleton.listaPokemon[position+1]
+        var pokemon : Pokemon? = null
 
-        if(position+1 >= 90){
+
+        when (generation){
+            1 -> {
+                pokemon = PokemonSingleton.listaPokemon[position+1]
+            }
+            2 -> {
+                pokemon = PokemonSingleton.listaPokemon[position+152]
+            }
+            3 -> {
+                pokemon = PokemonSingleton.listaPokemon[position+252]
+            }
+            4 -> {
+                pokemon = PokemonSingleton.listaPokemon[position+387]
+            }
+            5 -> {
+                pokemon = PokemonSingleton.listaPokemon[position+494]
+            }
+            6 -> {
+                pokemon = PokemonSingleton.listaPokemon[position+650]
+            }
+            7 -> {
+                pokemon = PokemonSingleton.listaPokemon[position+722]
+            }
+            8 -> {
+                pokemon = PokemonSingleton.listaPokemon[position+810]
+            }
+        }
+
+        if(generation == 1 && position+1 >= 90) {
             pokemon = PokemonSingleton.listaPokemon[position+2]
         }
 

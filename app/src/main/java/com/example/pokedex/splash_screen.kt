@@ -19,10 +19,12 @@ class splash_screen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
+        val firstPokemon = intent.getIntExtra("firstPoke", 1)
+        val lastPokemon = intent.getIntExtra("lastPoke", 151)
 
         Thread(Runnable {
-
-                receberPokemons()
+                PokemonSingleton.listaPokemon.clear()
+                receberPokemons(firstPokemon, lastPokemon)
 
             runOnUiThread {
                 val intent = Intent(baseContext, MainActivity::class.java)
@@ -32,9 +34,12 @@ class splash_screen : AppCompatActivity() {
         }).start()
     }
 
-    fun receberPokemons() {
+    fun receberPokemons(
+        firstPokemon: Int,
+        lastPokemon: Int
+    ){
 
-        for (i in 1..151){
+        for (i in firstPokemon..lastPokemon){
             if(i == 90) { continue }
             val url = "https://pokeapi.co/api/v2/pokemon/${i}"
 

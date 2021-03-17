@@ -4,4 +4,5 @@ import com.example.pokedex.model.Pokemon
 
 object PokemonSingleton {
     var listaPokemon : MutableMap<Int, Pokemon?> = mutableMapOf()
+    var geracaoSelecionada : Int = 1
 }
