@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             filtrada = PokemonSingleton.listaPokemon.filter { it?.name!!.contains(nome) }
         }
 
-        val adapter = PokemonAdapter(baseContext, filtrada)
+        val adapter = PokemonAdapter(baseContext, filtrada) { onClickRecycler(it) }
         recyclerViewPokemon.layoutManager = LinearLayoutManager(this)
         recyclerViewPokemon.adapter = adapter
     }
@@ -105,5 +105,9 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-
+    fun onClickRecycler(index : Int){
+        val intent = Intent(this, Pokemon_Activity::class.java)
+        intent.putExtra("idPokemon", index)
+        startActivity(intent)
+    }
 }

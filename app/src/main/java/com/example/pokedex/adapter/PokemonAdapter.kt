@@ -21,7 +21,8 @@ import java.lang.reflect.Type
 
 class PokemonAdapter(
     private val context : Context,
-    private val listaPokemon: List<Pokemon?>
+    private val listaPokemon: List<Pokemon?>,
+    private val onClick : ((Int) -> Unit)
 ) : RecyclerView.Adapter<PokemonViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
@@ -70,6 +71,7 @@ class PokemonAdapter(
         view.nomePokemon.text = pokemon?.name?.capitalize()
         Picasso.get().load(pokemon?.sprites?.front_default).into(view.imgPokemon)
         view.typePokemon1.text = pokemonTypeMain?.capitalize()
+        view.llnPokemon.setOnClickListener { onClick(position) }
     }
 }
 

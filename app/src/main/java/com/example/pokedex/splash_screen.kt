@@ -70,6 +70,9 @@ class splash_screen : AppCompatActivity() {
 
                         Log.d("POkemon", pokemonEscolhido.name)
                         Log.d("tamanho", "${PokemonSingleton.listaPokemon.size}")
+                        Log.d("level", "${ pokemonEscolhido.moves[0].version_group_details[0].level_learned_at }")
+                        Log.d("move", pokemonEscolhido.moves[0].move.name)
+
                     }catch (ex : Exception){
                         Log.d("erro", "${ex}")
                     }
