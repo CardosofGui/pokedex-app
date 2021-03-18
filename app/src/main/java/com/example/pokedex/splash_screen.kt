@@ -28,11 +28,6 @@ class splash_screen : AppCompatActivity() {
                 PokemonSingleton.listaPokemon.clear()
                 receberPokemons(firstPokemon, lastPokemon)
 
-            runOnUiThread {
-                val intent = Intent(baseContext, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
         }).start()
     }
 
@@ -42,7 +37,6 @@ class splash_screen : AppCompatActivity() {
     ){
 
         for (i in firstPokemon..lastPokemon){
-            if(i == 90) { continue }
             val url = "https://pokeapi.co/api/v2/pokemon/${i}"
 
             val client = OkHttpClient()
@@ -50,22 +44,35 @@ class splash_screen : AppCompatActivity() {
 
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-
+                    Log.d("Erro", "não deu certo")
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    val body = response?.body?.string()
-                    val gson = GsonBuilder().create()
+                    try {
+                        val body = response?.body?.string()
+                        val gson = GsonBuilder().create()
 
-                    val pokemonEscolhido = gson.fromJson(body, Pokemon::class.java)
+                        val pokemonEscolhido = gson.fromJson(body, Pokemon::class.java)
 
-                    PokemonSingleton.listaPokemon.add(pokemonEscolhido)
+                        PokemonSingleton.listaPokemon.add(pokemonEscolhido)
 
-                    loading.progress = PokemonSingleton.listaPokemon.size
-                    runOnUiThread { txtLoading.text = "Carregando pokemon: ${pokemonEscolhido.name.capitalize()}" }
+                        loading.progress = PokemonSingleton.listaPokemon.size
 
-                    Log.d("POkemon", pokemonEscolhido.name)
-                    Log.d("tamanho", "${PokemonSingleton.listaPokemon.size}")
+                        runOnUiThread {
+                            txtLoading.text = "Carregando pokemon: ${pokemonEscolhido.name.capitalize()}"
+
+                            if(PokemonSingleton.listaPokemon.size >= lastPokemon-firstPokemon){
+                                val intent = Intent(baseContext, MainActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                        }
+
+                        Log.d("POkemon", pokemonEscolhido.name)
+                        Log.d("tamanho", "${PokemonSingleton.listaPokemon.size}")
+                    }catch (ex : Exception){
+                        Log.d("erro", "${ex}")
+                    }
                 }
             })
         }
