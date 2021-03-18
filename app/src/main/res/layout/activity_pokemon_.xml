@@ -6,12 +6,14 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".Pokemon_Activity">
+    tools:context=".Pokemon_Activity"
+    android:background="#121212">
 
     <ImageView
         android:id="@+id/imgExibirPokemon"
         android:layout_width="250dp"
         android:layout_height="250dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/background_pokemon"/>
 
     <TextView

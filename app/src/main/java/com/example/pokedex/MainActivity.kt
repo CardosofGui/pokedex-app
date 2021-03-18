@@ -3,10 +3,12 @@ package com.example.pokedex
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokedex.adapter.PokemonAdapter
 import com.example.pokedex.model.Pokemon
@@ -15,12 +17,28 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    private var doubleBackToExitPressedOnce = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        PokemonSingleton.dadosCarregadosSucesso = true
         buscadorAutomatico()
+        setupActionBarName()
+    }
+
+    private fun setupActionBarName() {
+        when(PokemonSingleton.geracaoSelecionada){
+            1 -> supportActionBar?.title = "Primeira Geração"
+            2 -> supportActionBar?.title = "Segunda Geração"
+            3 -> supportActionBar?.title = "Terceira Geração"
+            4 -> supportActionBar?.title = "Quarta Geração"
+            5 -> supportActionBar?.title = "Quinta Geração"
+            6 -> supportActionBar?.title = "Sexta Geração"
+            7 -> supportActionBar?.title = "Setima Geração"
+            8 -> supportActionBar?.title = "Oitava Geração"
+        }
     }
 
     private fun buscadorAutomatico() {
@@ -35,7 +53,6 @@ class MainActivity : AppCompatActivity() {
 
         })
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -109,5 +126,17 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, Pokemon_Activity::class.java)
         intent.putExtra("idPokemon", index)
         startActivity(intent)
+    }
+
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(this, "Pressione novamente para sair", Toast.LENGTH_SHORT).show()
+
+        Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
     }
 }

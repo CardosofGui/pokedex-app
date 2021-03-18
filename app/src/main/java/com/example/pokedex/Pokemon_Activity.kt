@@ -2,6 +2,7 @@ package com.example.pokedex
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,6 +28,7 @@ class Pokemon_Activity : AppCompatActivity() {
         setContentView(R.layout.activity_pokemon_)
 
         idPokemon = intent.getIntExtra("idPokemon", 1)
+        supportActionBar?.title = PokemonSingleton.listaPokemon[idPokemon]!!.name.capitalize()
 
         PokemonSingleton.listaPokemon[idPokemon]?.moves?.forEach {
             var nome = it.move.name
@@ -44,6 +46,11 @@ class Pokemon_Activity : AppCompatActivity() {
 
         setupActivity()
         setupRecyclerView()
+        setupBackNavigation()
+    }
+
+    private fun setupBackNavigation() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun setupRecyclerView() {
@@ -79,5 +86,21 @@ class Pokemon_Activity : AppCompatActivity() {
         }else{
             txtExibirType2.visibility = View.GONE
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                this.onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        finish()
     }
 }
