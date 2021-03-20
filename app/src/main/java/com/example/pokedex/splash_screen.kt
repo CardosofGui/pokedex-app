@@ -38,6 +38,7 @@ class splash_screen : AppCompatActivity() {
                 carregarPokemons()
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             }
 
         }).start()
@@ -61,18 +62,23 @@ class splash_screen : AppCompatActivity() {
             val request = okhttp3.Request.Builder().url(url).build()
             client.dispatcher.maxRequestsPerHost = 50
 
-            var response = client.newCall(request).execute()
-            val body = response?.body?.string()
-            val gson = GsonBuilder().create()
-            val pokemonEscolhido = gson.fromJson(body, Pokemon::class.java)
-            pokemonEscolhido.setPositionPoke(PokemonSingleton.listaPokemon.size)
+            try {
+                var response = client.newCall(request).execute()
+                val body = response?.body?.string()
+                val gson = GsonBuilder().create()
+                val pokemonEscolhido = gson.fromJson(body, Pokemon::class.java)
+                pokemonEscolhido.setPositionPoke(PokemonSingleton.listaPokemon.size)
 
-            PokemonSingleton.listaPokemon.add(pokemonEscolhido)
+                PokemonSingleton.listaPokemon.add(pokemonEscolhido)
 
-            runOnUiThread {
-                loading.progress = PokemonSingleton.listaPokemon.size
-                txtLoading.text = "Carregando pokemon: ${pokemonEscolhido.name?.capitalize()}"
+                runOnUiThread {
+                    loading.progress = PokemonSingleton.listaPokemon.size
+                    txtLoading.text = "Carregando pokemon: ${pokemonEscolhido.name?.capitalize()}"
+                }
+            }catch (e : Exception){
+                Log.d("Erro request", e.toString())
             }
+
         }
 
         Log.d("request finalizado", "Acabou")
