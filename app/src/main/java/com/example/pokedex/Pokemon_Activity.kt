@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +29,6 @@ class Pokemon_Activity : AppCompatActivity() {
         setContentView(R.layout.activity_pokemon_)
 
         idPokemon = intent.getIntExtra("idPokemon", 1)
-        supportActionBar?.title = PokemonSingleton.listaPokemon[idPokemon]!!.name.capitalize()
 
         PokemonSingleton.listaPokemon[idPokemon]?.moves?.forEach {
             var nome = it.move.name
@@ -46,12 +46,9 @@ class Pokemon_Activity : AppCompatActivity() {
 
         setupActivity()
         setupRecyclerView()
-        setupBackNavigation()
     }
 
-    private fun setupBackNavigation() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
+
 
     private fun setupRecyclerView() {
         listaMoves.sortBy { it.lvlUp }
@@ -61,6 +58,11 @@ class Pokemon_Activity : AppCompatActivity() {
     }
 
     private fun setupActivity() {
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.title = PokemonSingleton.listaPokemon[idPokemon]!!.name.capitalize()
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val pokemonSelecionado = PokemonSingleton.listaPokemon[idPokemon]!!
 
         Picasso.get().load(pokemonSelecionado.sprites.front_default).into(imgExibirPokemon)
@@ -85,6 +87,10 @@ class Pokemon_Activity : AppCompatActivity() {
             }
         }else{
             txtExibirType2.visibility = View.GONE
+        }
+
+        if(pokemonSelecionado.moves?.size == 0){
+            txtSemMove.visibility = View.VISIBLE
         }
     }
 

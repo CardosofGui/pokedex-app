@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="#FFFFFF"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".splash_screen">
@@ -22,7 +22,7 @@
         android:fontFamily="@font/roboto"
         android:text="Aguarde enquanto carregamos os dados!"
         android:textAlignment="center"
-        android:textColor="#FFFFFF"
+        android:textColor="#000000"
         android:textStyle="bold" />
 
     <ProgressBar
@@ -41,7 +41,7 @@
         android:layout_marginTop="15dp"
         android:fontFamily="@font/roboto"
         android:text="Carregando pokemon: ${pokemon}"
-        android:textColor="#FFFFFF"
+        android:textColor="#000000"
         android:textStyle="bold" />
 
     <TextView
@@ -49,9 +49,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:fontFamily="@font/roboto"
-        android:text="Tempo médio de carregamendo 15-30seg\n Caso o carregamento trave reinicie a aplicação!"
+        android:text="Após a primeira inicialização\n as proximas serão mais rapidas!"
         android:textAlignment="center"
-        android:textColor="#FF0000"
+        android:textColor="#FFAD06"
         android:textStyle="bold" />
 
 </LinearLayout>
