@@ -1,6 +1,12 @@
 package com.example.pokedex.model
 
-class Pokemon(val id: Int, val name : String, val types : List<index>, val sprites: sprites, val moves : List<IndexMoves>)
+class Pokemon(val id: Int, val name : String, val types : List<index>, val sprites: sprites, val moves : List<IndexMoves>?){
+    var position = 0
+
+    fun setPositionPoke(index : Int){
+        position = index
+    }
+}
 
 class IndexMoves(val move : Move, val version_group_details : List<IndexLevel>)
 

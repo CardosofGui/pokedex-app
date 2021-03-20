@@ -36,48 +36,32 @@ class splash_screen : AppCompatActivity() {
         lastPokemon: Int
     ){
 
-        for (i in firstPokemon..lastPokemon){
+        for (i in firstPokemon..lastPokemon) {
             val url = "https://pokeapi.co/api/v2/pokemon/${i}"
 
             val client = OkHttpClient()
             val request = okhttp3.Request.Builder().url(url).build()
+            client.dispatcher.maxRequestsPerHost = 5
 
-            client.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    Log.d("Erro", "não deu certo")
-                }
+            var response = client.newCall(request).execute()
+            val body = response?.body?.string()
+            val gson = GsonBuilder().create()
+            val pokemonEscolhido = gson.fromJson(body, Pokemon::class.java)
+            pokemonEscolhido.setPositionPoke(PokemonSingleton.listaPokemon.size)
 
-                override fun onResponse(call: Call, response: Response) {
-                    try {
-                        val body = response?.body?.string()
-                        val gson = GsonBuilder().create()
+            PokemonSingleton.listaPokemon.add(pokemonEscolhido)
 
-                        val pokemonEscolhido = gson.fromJson(body, Pokemon::class.java)
+            runOnUiThread {
+                loading.progress = PokemonSingleton.listaPokemon.size
+                txtLoading.text = "Carregando pokemon: ${pokemonEscolhido.name?.capitalize()}"
+            }
 
-                        PokemonSingleton.listaPokemon.add(pokemonEscolhido)
-
-                        loading.progress = PokemonSingleton.listaPokemon.size
-
-                        runOnUiThread {
-                            txtLoading.text = "Carregando pokemon: ${pokemonEscolhido.name.capitalize()}"
-
-                            if(PokemonSingleton.listaPokemon.size >= lastPokemon-firstPokemon){
-                                val intent = Intent(baseContext, MainActivity::class.java)
-                                startActivity(intent)
-                                finish()
-                            }
-                        }
-
-                        Log.d("POkemon", pokemonEscolhido.name)
-                        Log.d("tamanho", "${PokemonSingleton.listaPokemon.size}")
-                        Log.d("level", "${ pokemonEscolhido.moves[0].version_group_details[0].level_learned_at }")
-                        Log.d("move", pokemonEscolhido.moves[0].move.name)
-
-                    }catch (ex : Exception){
-                        Log.d("erro", "${ex}")
-                    }
-                }
-            })
+            if (PokemonSingleton.listaPokemon.size == lastPokemon-firstPokemon) {
+                Log.d("request finalizado", "Acabou")
+                val intent = Intent(baseContext, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 

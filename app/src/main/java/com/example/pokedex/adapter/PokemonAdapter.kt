@@ -71,7 +71,7 @@ class PokemonAdapter(
         view.nomePokemon.text = pokemon?.name?.capitalize()
         Picasso.get().load(pokemon?.sprites?.front_default).into(view.imgPokemon)
         view.typePokemon1.text = pokemonTypeMain?.capitalize()
-        view.llnPokemon.setOnClickListener { onClick(position) }
+        view.llnPokemon.setOnClickListener { onClick(pokemon!!.position) }
     }
 }
 
