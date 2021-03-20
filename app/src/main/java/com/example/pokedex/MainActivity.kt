@@ -178,6 +178,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun geracaoArmazenada(){
+        nomeBuscaPoke.setText("")
         setupActionBarName()
         PokemonSingleton.listaPokemon.clear()
 
@@ -188,6 +189,7 @@ class MainActivity : AppCompatActivity() {
             llnLoading.visibility = View.VISIBLE
             loading.max = lastPokemon - firstPokemon
             loading.progress = 0
+            txtLoading.setText("Carregando pokemon: ")
 
             Thread(Runnable {
                 receberDadosAPI(firstPokemon, lastPokemon)
@@ -244,7 +246,7 @@ class MainActivity : AppCompatActivity() {
 
                     runOnUiThread {
                         loading.progress = PokemonSingleton.listaPokemon.size
-                        txtLoading.text = "Carregando pokemon: ${pokemonEscolhido.name}"
+                        txtLoading.text = "Carregando pokemon: ${pokemonEscolhido.name.capitalize()}"
 
                         var limit = 0
                         if(PokemonSingleton.geracaoSelecionada == 1){

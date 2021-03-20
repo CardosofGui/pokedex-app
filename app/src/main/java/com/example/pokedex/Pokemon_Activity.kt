@@ -3,9 +3,13 @@ package com.example.pokedex
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
+import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokedex.R
@@ -30,6 +34,14 @@ class Pokemon_Activity : AppCompatActivity() {
 
         idPokemon = intent.getIntExtra("idPokemon", 1)
 
+        setupMoves()
+        setupActivity()
+        setupRecyclerView()
+        setupClicks()
+    }
+
+    private fun setupMoves(){
+        listaMoves.clear()
         PokemonSingleton.listaPokemon[idPokemon]?.moves?.forEach {
             var nome = it.move.name
             var lvl = it.version_group_details[0].level_learned_at
@@ -44,16 +56,51 @@ class Pokemon_Activity : AppCompatActivity() {
             }
         }
 
-        setupActivity()
-        setupRecyclerView()
+        listaMoves.sortBy { it.lvlUp }
     }
 
+    private fun setupClicks() {
+        var animation = AnimationUtils.loadAnimation(baseContext, R.anim.animation)
 
+        nextPokemon.setOnClickListener {
+            nextPokemon.startAnimation(animation)
+
+            idPokemon++
+
+            if(idPokemon >= 0 && idPokemon < PokemonSingleton.listaPokemon.size){
+                setupMoves()
+                setupActivity()
+                setupRecyclerView()
+
+
+            }else{
+                idPokemon--
+                Toast.makeText(baseContext, "Não existe proximo pokemon", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        backPokemon.setOnClickListener {
+            backPokemon.startAnimation(animation)
+
+            idPokemon--
+
+            if(idPokemon >= 0 && idPokemon <= PokemonSingleton.listaPokemon.size){
+                setupMoves()
+                setupActivity()
+                setupRecyclerView()
+
+
+            }else{
+                idPokemon++
+                Toast.makeText(baseContext, "Não existe pokemon anterior", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
 
     private fun setupRecyclerView() {
-        listaMoves.sortBy { it.lvlUp }
         val adapter = MoveAdapter(this, listaMoves)
         recyclerViewMoves.layoutManager = GridLayoutManager(this, 2)
+
         recyclerViewMoves.adapter = adapter
     }
 

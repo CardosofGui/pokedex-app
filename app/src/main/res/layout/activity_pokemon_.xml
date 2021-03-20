@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:orientation="vertical"
-    tools:context=".Pokemon_Activity"
-    android:background="#FFFFFF">
+    tools:context=".Pokemon_Activity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -17,17 +17,57 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imgExibirPokemon"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_marginTop="15dp"
-            app:civ_border_width="4dp"
-            app:civ_border_color="@color/black"
-            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="250dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+
+                <ImageView
+                    android:id="@+id/backPokemon"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:src="@drawable/ic_baseline_arrow_back_24"
+                    android:backgroundTint="@color/black"/>
+
+            </LinearLayout>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgExibirPokemon"
+                android:layout_width="0dp"
+                android:layout_height="250dp"
+                android:layout_weight="3"
+                app:civ_border_color="@color/black"
+                app:civ_border_width="4dp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="250dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+
+                <ImageView
+                    android:id="@+id/nextPokemon"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:src="@drawable/ic_baseline_arrow_forward_24" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/txtExibirNomePokemon"
@@ -79,7 +119,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewMoves"
@@ -90,14 +130,14 @@
         </FrameLayout>
 
         <TextView
+            android:id="@+id/txtSemMove"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Nenhum Move foi encontado em nosso banco de dados!"
             android:textColor="#FF0000"
             android:textStyle="bold"
-            android:id="@+id/txtSemMove"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
 
     </LinearLayout>
 
