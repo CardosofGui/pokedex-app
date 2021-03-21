@@ -2,7 +2,7 @@
 
   Uma Pokedex desenvolvida para aplicar conhecimentos de OkHttp3, Gson, API "PokéAPI" e NavigationView
 
-# IMAGENS ILUSTRATIVAS
+# Imagens Ilustrativas
 <table>
     <td>
         <p align="center">Tela de carregamento</p>
@@ -26,7 +26,7 @@
     </td>
 </table>
 
-# Melhorias futuras
+# Melhorias Futuras
 * Melhorar código (principalmente alguns códigos desnecessarios e comentar linhas)
 * Melhorar conexão com a API
 * Deixar o APP compativel a partir da API 23
