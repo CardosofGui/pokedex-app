@@ -5,53 +5,63 @@
 
     <group android:checkableBehavior="single">
 
-        <item
-            android:id="@+id/primeiraGeracao"
-            android:icon="@drawable/ic_baseline_filter_1_24"
-            android:title="Primeira Geração"
-            app:showAsAction="never" />
+        <item android:title="Gerações">
 
-        <item
-            android:id="@+id/segundaGeracao"
-            android:icon="@drawable/ic_baseline_filter_2_24"
-            android:title="Segunda Geração"
-            app:showAsAction="never" />
+            <menu>
 
-        <item
-            android:id="@+id/terceiraGeracao"
-            android:icon="@drawable/ic_baseline_filter_3_24"
-            android:title="Terceira Geração"
-            app:showAsAction="never" />
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/primeiraGeracao"
+                        android:icon="@drawable/ic_baseline_filter_1_24"
+                        android:title="Primeira Geração"
+                        app:showAsAction="never" />
 
-        <item
-            android:id="@+id/quartaGeracao"
-            android:icon="@drawable/ic_baseline_filter_4_24"
-            android:title="Quarta Geração"
-            app:showAsAction="never" />
+                    <item
+                        android:id="@+id/segundaGeracao"
+                        android:icon="@drawable/ic_baseline_filter_2_24"
+                        android:title="Segunda Geração"
+                        app:showAsAction="never" />
 
-        <item
-            android:id="@+id/quintaGeracao"
-            android:icon="@drawable/ic_baseline_filter_5_24"
-            android:title="Quinta Geração"
-            app:showAsAction="never" />
+                    <item
+                        android:id="@+id/terceiraGeracao"
+                        android:icon="@drawable/ic_baseline_filter_3_24"
+                        android:title="Terceira Geração"
+                        app:showAsAction="never" />
 
-        <item
-            android:id="@+id/sextaGeracao"
-            android:icon="@drawable/ic_baseline_filter_6_24"
-            android:title="Sexta Geração"
-            app:showAsAction="never" />
+                    <item
+                        android:id="@+id/quartaGeracao"
+                        android:icon="@drawable/ic_baseline_filter_4_24"
+                        android:title="Quarta Geração"
+                        app:showAsAction="never" />
 
-        <item
-            android:id="@+id/setimaGeracao"
-            android:icon="@drawable/ic_baseline_filter_7_24"
-            android:title="Setima Geração"
-            app:showAsAction="never" />
+                    <item
+                        android:id="@+id/quintaGeracao"
+                        android:icon="@drawable/ic_baseline_filter_5_24"
+                        android:title="Quinta Geração"
+                        app:showAsAction="never" />
 
-        <item
-            android:id="@+id/oitavaGeracao"
-            android:icon="@drawable/ic_baseline_filter_8_24"
-            android:title="Oitava Geração"
-            app:showAsAction="never" />
+                    <item
+                        android:id="@+id/sextaGeracao"
+                        android:icon="@drawable/ic_baseline_filter_6_24"
+                        android:title="Sexta Geração"
+                        app:showAsAction="never" />
+
+                    <item
+                        android:id="@+id/setimaGeracao"
+                        android:icon="@drawable/ic_baseline_filter_7_24"
+                        android:title="Setima Geração"
+                        app:showAsAction="never" />
+
+                    <item
+                        android:id="@+id/oitavaGeracao"
+                        android:icon="@drawable/ic_baseline_filter_8_24"
+                        android:title="Oitava Geração"
+                        app:showAsAction="never" />
+                </group>
+
+            </menu>
+
+        </item>
 
     </group>
 
