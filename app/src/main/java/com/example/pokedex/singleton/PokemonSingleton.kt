@@ -12,34 +12,4 @@ import com.google.gson.Gson
 object PokemonSingleton {
     var listaPokemon : MutableList<Pokemon?> = mutableListOf()
     var geracaoSelecionada : Int = 1
-    var firstPokemon = 1
-    var lastPokemon = 151
-
-
-
-    fun adicionarPokemon(adapter: PokemonAdapter, pokemon: Pokemon, limit : Int, loading : LinearLayout){
-        listaPokemon.add(pokemon)
-        listaPokemon.sortBy { it?.id }
-
-        if(listaPokemon.size == limit){
-            adapter.notifyDataSetChanged()
-            loading.visibility = View.GONE
-
-            var i = 0
-            listaPokemon.forEach {
-                it?.setPositionPoke(i)
-                i++
-            }
-
-            salvarPokemons()
-        }
-    }
-
-    fun salvarPokemons(){
-        var jsonTexto = Gson().toJson(PokemonSingleton.listaPokemon)
-
-        PokemonApplication.instance.adicionarPreferences.putBoolean("geracao ${PokemonSingleton.geracaoSelecionada} salva", true)
-        PokemonApplication.instance.adicionarPreferences.putString("lista ${PokemonSingleton.geracaoSelecionada} salva", jsonTexto)
-        PokemonApplication.instance.adicionarPreferences.apply()
-    }
 }

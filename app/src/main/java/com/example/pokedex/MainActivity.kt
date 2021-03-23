@@ -7,17 +7,18 @@ import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokedex.adapter.PokemonAdapter
 import com.example.pokedex.application.PokemonApplication
+import com.example.pokedex.model.ClickAction
 import com.example.pokedex.model.Pokemon
+import com.example.pokedex.model.SharedPreferencesPokemon
 import com.example.pokedex.singleton.PokemonSingleton
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -32,109 +33,53 @@ import java.io.IOException
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ClickAction {
 
+    lateinit var pokemonAdapter : PokemonAdapter
     private var doubleBackToExitPressedOnce = false
-    lateinit var adapter : PokemonAdapter
-    var filtrada : List<Pokemon?> = PokemonSingleton.listaPokemon
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_menu)
 
-        geracaoArmazenada()
+        verificarPokemonsArmazenados()
         initDrawer()
         buscadorAutomatico()
         setupActionBarName()
     }
 
     private fun initDrawer() {
-        val drawerLayout = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-
-        val toogle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer)
-        drawerLayout.addDrawerListener(toogle)
+        val toogle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.open_drawer, R.string.close_drawer)
+        drawer_layout.addDrawerListener(toogle)
         toogle.syncState()
 
         nav_view.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.primeiraGeracao -> {
-                    PokemonSingleton.geracaoSelecionada = 1
-                    PokemonSingleton.firstPokemon = 1
-                    PokemonSingleton.lastPokemon = 151
-                    geracaoArmazenada()
-                    Toast.makeText(baseContext, "Carregando Primeira geração", Toast.LENGTH_SHORT).show()
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    false
+                    onClickNavigationMenu(SharedPreferencesPokemon.GERACAO_UM)
                 }
                 R.id.segundaGeracao -> {
-                    PokemonSingleton.geracaoSelecionada = 2
-                    PokemonSingleton.firstPokemon = 152
-                    PokemonSingleton.lastPokemon = 251
-                    geracaoArmazenada()
-                    Toast.makeText(baseContext, "Carregando Segunda geração", Toast.LENGTH_SHORT).show()
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    false
+                    onClickNavigationMenu(SharedPreferencesPokemon.GERACAO_DOIS)
                 }
                 R.id.terceiraGeracao -> {
-                    PokemonSingleton.geracaoSelecionada = 3
-                    PokemonSingleton.firstPokemon = 252
-                    PokemonSingleton.lastPokemon = 386
-                    geracaoArmazenada()
-                    Toast.makeText(baseContext, "Carregando Terceira geração", Toast.LENGTH_SHORT).show()
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    false
+                    onClickNavigationMenu(SharedPreferencesPokemon.GERACAO_TRES)
                 }
                 R.id.quartaGeracao -> {
-                    PokemonSingleton.geracaoSelecionada = 4
-                    PokemonSingleton.firstPokemon = 387
-                    PokemonSingleton.lastPokemon = 493
-                    geracaoArmazenada()
-                    Toast.makeText(baseContext, "Carregando Quarta geração", Toast.LENGTH_SHORT).show()
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    false
+                    onClickNavigationMenu(SharedPreferencesPokemon.GERACAO_QUATRO)
                 }
                 R.id.quintaGeracao -> {
-                    PokemonSingleton.geracaoSelecionada = 5
-                    PokemonSingleton.firstPokemon = 494
-                    PokemonSingleton.lastPokemon = 649
-                    geracaoArmazenada()
-                    Toast.makeText(baseContext, "Carregando Quinta geração", Toast.LENGTH_SHORT).show()
-                    drawerLayout.closeDrawer(GravityCompat.START)
-
-                    false
+                    onClickNavigationMenu(SharedPreferencesPokemon.GERACAO_QUINTA)
                 }
                 R.id.sextaGeracao -> {
-                    PokemonSingleton.geracaoSelecionada = 6
-                    PokemonSingleton.firstPokemon = 650
-                    PokemonSingleton.lastPokemon = 721
-                    geracaoArmazenada()
-                    Toast.makeText(baseContext, "Carregando Sexta geração", Toast.LENGTH_SHORT).show()
-                    drawerLayout.closeDrawer(GravityCompat.START)
-
-                    false
+                    onClickNavigationMenu(SharedPreferencesPokemon.GERACAO_SEXTA)
                 }
                 R.id.setimaGeracao -> {
-                    PokemonSingleton.geracaoSelecionada = 7
-                    PokemonSingleton.firstPokemon = 722
-                    PokemonSingleton.lastPokemon = 809
-                    geracaoArmazenada()
-                    Toast.makeText(baseContext, "Carregando Setima geração", Toast.LENGTH_SHORT).show()
-                    drawerLayout.closeDrawer(GravityCompat.START)
-
-                    false
+                    onClickNavigationMenu(SharedPreferencesPokemon.GERACAO_SETIMA)
                 }
                 R.id.oitavaGeracao -> {
-                    PokemonSingleton.geracaoSelecionada = 8
-                    PokemonSingleton.firstPokemon = 810
-                    PokemonSingleton.lastPokemon = 898
-                    geracaoArmazenada()
-                    Toast.makeText(baseContext, "Carregando Oitava geração", Toast.LENGTH_SHORT).show()
-                    drawerLayout.closeDrawer(GravityCompat.START)
-
-                    false
+                    onClickNavigationMenu(SharedPreferencesPokemon.GERACAO_OITAVA)
                 }
                 else -> false
             }
@@ -161,58 +106,180 @@ class MainActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                receberPokemons()
+                buscarPokemons()
             }
 
         })
     }
 
-    fun receberPokemons() {
-        PokemonSingleton.listaPokemon.sortBy { it?.id }
+    private fun buscarPokemons() {
         var nome: String = nomeBuscaPoke.text.toString().toLowerCase()
+        var listaFiltrada : List<Pokemon?> = PokemonSingleton.listaPokemon
+
 
         if (!nome.isNullOrEmpty()) {
-            filtrada = PokemonSingleton.listaPokemon.filter { it?.name!!.contains(nome) || it?.id!!.toString().contains(nome) }
-        }else{
-            filtrada = PokemonSingleton.listaPokemon
+            listaFiltrada = PokemonSingleton.listaPokemon.filter {
+                it?.name!!.contains(nome) || it?.id!!.toString().contains(nome)
+            }
         }
 
-        adapter = PokemonAdapter(baseContext, filtrada) { onClickRecycler(it) }
+        pokemonAdapter = PokemonAdapter(baseContext, listaFiltrada, onClick = { onClickRecycler(it) }, onClickError = { onClickError(it) })
         recyclerViewPokemon.layoutManager = LinearLayoutManager(this)
-        recyclerViewPokemon.adapter = adapter
+        recyclerViewPokemon.adapter = pokemonAdapter
     }
 
-    private fun geracaoArmazenada(){
+    private fun onClickError(it: Int) {
+        val pokemon = PokemonSingleton.listaPokemon[it]
+
+        val client = OkHttpClient().newBuilder().readTimeout(2, TimeUnit.MINUTES).connectTimeout(2, TimeUnit.MINUTES).build()
+        val url = "https://pokeapi.co/api/v2/pokemon/${pokemon?.id}"
+        val request = okhttp3.Request.Builder().url(url).build()
+
+        try {
+            val response = client.newCall(request).execute()
+            val body = response?.body?.string()
+            val gson = GsonBuilder().create()
+            val pokemonEscolhido = gson.fromJson(body, Pokemon::class.java)
+            PokemonSingleton.listaPokemon[it] = pokemonEscolhido
+            pokemonAdapter.notifyDataSetChanged()
+        }catch (e : Exception){
+            Toast.makeText(baseContext, "Pokemon Não Encontrado \nTente novamente outra hora", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun verificarPokemonsArmazenados(){
+        PokemonSingleton.listaPokemon.clear()
         nomeBuscaPoke.setText("")
         setupActionBarName()
-        PokemonSingleton.listaPokemon.clear()
 
-        val firstPokemon = PokemonSingleton.firstPokemon
-        val lastPokemon = PokemonSingleton.lastPokemon
-
-        if(!verificarPokemonsSalvo()){
-            llnLoading.visibility = View.VISIBLE
-            loading.max = lastPokemon - firstPokemon
-            loading.progress = 0
-            txtLoading.setText("Carregando pokemon: ")
-
-            Thread(Runnable {
-                receberDadosAPI(firstPokemon, lastPokemon)
-            }).start()
-        }else{
+        if(verificarGeracaoSalva()){
+            // Se já tiver essa geração armazenada ele irá carregar os dados
             carregarPokemons()
+        }else{
+            // Caso não tenha salva será solicitado a API os dados dos Pokemons
+            llnLoading.visibility = View.VISIBLE
+            txtLoading.text = getString(R.string.carregando_pokemon)
+
+            drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            fetchPokeAPI(1, 898)
+        }
+    }
+
+    private fun onClickRecycler(index : Int){
+        val intent = Intent(this, Pokemon_Activity::class.java)
+        intent.putExtra("idPokemon", index)
+        startActivity(intent)
+    }
+
+    private fun fetchPokeAPI(
+        firstPokemon: Int,
+        lastPokemon: Int
+    ){
+        Thread(Runnable {
+            val client = OkHttpClient().newBuilder().readTimeout(2, TimeUnit.MINUTES).connectTimeout(2, TimeUnit.MINUTES).build()
+
+            for (index in firstPokemon..lastPokemon) {
+                val url = "https://pokeapi.co/api/v2/pokemon/${index}"
+                val request = okhttp3.Request.Builder().url(url).build()
+
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        Log.d("Erro Conexao", "$e")
+                    }
+
+                    override fun onResponse(call: Call, response: Response) {
+                        try {
+                            val body = response?.body?.string()
+                            val gson = GsonBuilder().create()
+                            val pokemonEscolhido = gson.fromJson(body, Pokemon::class.java)
+                            PokemonSingleton.listaPokemon.adicionarPokemon(pokemonAdapter, pokemonEscolhido, (lastPokemon-firstPokemon)+1, llnLoading)
+
+                            runOnUiThread {
+                                txtLoading.text = "Carregando pokemon: ${pokemonEscolhido.name.capitalize()} \n ${PokemonSingleton.listaPokemon.size}/898"
+                            }
+                        }catch (e : Exception){
+                            Log.d("Pokemon", "Pokemon não encontrado: ID:$index - Excepetion: $e")
+
+                            val pokemonEscolhido = Pokemon(
+                                index,
+                                "Pokemon não encontado",
+                                null,
+                                null,
+                                null
+                            )
+
+
+                            PokemonSingleton.listaPokemon.adicionarPokemon(pokemonAdapter, pokemonEscolhido, (lastPokemon-firstPokemon)+1, llnLoading)
+                        }
+                    }
+                })
+            }
+        }).start()
+    }
+
+    private fun verificarGeracaoSalva() : Boolean{
+        return PokemonApplication.instance.sharedPreferences.getBoolean("geracao ${PokemonSingleton.geracaoSelecionada} salva", false)
+    }
+
+    private fun carregarPokemons(){
+        llnLoading.visibility = View.VISIBLE
+        txtLoading.visibility = View.GONE
+
+        Thread(Runnable {
+            var json = PokemonApplication.instance.sharedPreferences.getString("lista ${PokemonSingleton.geracaoSelecionada} salva", null)
+            var type = object : TypeToken<MutableList<Pokemon?>>() {}.type
+            var lista : MutableList<Pokemon?> = Gson().fromJson(json, type)
+
+            PokemonSingleton.listaPokemon = lista
+
+            runOnUiThread {
+                buscarPokemons()
+                llnLoading.visibility = View.GONE
+            }
+        }).start()
+    }
+
+    private fun salvarPokemons(listPokemon : List<Pokemon?>){
+        SharedPreferencesPokemon.values().forEach {
+            var list = listPokemon.filter { pokemon: Pokemon? ->
+                pokemon!!.id >= it.firstPokemon && pokemon!!.id <= it.lastPokemon }
+
+            var jsonTexto = Gson().toJson(list)
+
+            PokemonApplication.instance.adicionarPreferences.putBoolean("geracao ${it.geracao} salva", true)
+            PokemonApplication.instance.adicionarPreferences.putString("lista ${it.geracao} salva", jsonTexto)
+            PokemonApplication.instance.adicionarPreferences.apply()
+
+            if(it.geracao == 1){
+                carregarPokemons()
+            }
+        }
+
+        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+    }
+
+    private fun MutableList<Pokemon?>.adicionarPokemon(adapter: PokemonAdapter, pokemon: Pokemon, limit : Int, loading : LinearLayout){
+        runOnUiThread {
+            this.add(pokemon)
+
+            if(this.size == limit){
+                loading.visibility = View.GONE
+                this.sortBy { it?.id }
+
+                var i = 0
+                this.forEach {
+                    it?.setPositionPoke(i)
+                    i++
+                }
+
+                salvarPokemons(this)
+            }
         }
     }
 
     override fun onResume() {
-        receberPokemons()
+        buscarPokemons()
         super.onResume()
-    }
-
-    fun onClickRecycler(index : Int){
-        val intent = Intent(this, Pokemon_Activity::class.java)
-        intent.putExtra("idPokemon", index)
-        startActivity(intent)
     }
 
     override fun onBackPressed() {
@@ -227,67 +294,12 @@ class MainActivity : AppCompatActivity() {
         Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
     }
 
-    fun receberDadosAPI(
-        firstPokemon: Int,
-        lastPokemon: Int
-    ){
+    override fun onClickNavigationMenu(sharedPreferencesPokemon: SharedPreferencesPokemon) : Boolean {
+        PokemonSingleton.geracaoSelecionada = sharedPreferencesPokemon.geracao
 
-        for (i in firstPokemon..lastPokemon) {
-            val url = "https://pokeapi.co/api/v2/pokemon/${i}"
-
-            val client = OkHttpClient().newBuilder().readTimeout(5, TimeUnit.MINUTES).connectTimeout(5, TimeUnit.MINUTES).build()
-            val request = okhttp3.Request.Builder().url(url).build()
-            client.dispatcher.maxRequestsPerHost = 50
-
-            client.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    Log.d("Erro Conexao", "${i} - $e")
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    try {
-                        val body = response?.body?.string()
-                        val gson = GsonBuilder().create()
-                        val pokemonEscolhido = gson.fromJson(body, Pokemon::class.java)
-
-                        runOnUiThread {
-                            loading.progress = PokemonSingleton.listaPokemon.size
-                            txtLoading.text = "Carregando pokemon: ${pokemonEscolhido.name.capitalize()}"
-
-                            PokemonSingleton.adicionarPokemon(adapter, pokemonEscolhido, (lastPokemon-firstPokemon)+1, llnLoading)
-                        }
-                    }catch (e : Exception){
-                        Log.d("Erro poke", "${i} - $e")
-
-                        val pokemonEscolhido = Pokemon(
-                            i,
-                            "Pokemon não encontado",
-                            null,
-                            null,
-                            null
-                        )
-                        PokemonSingleton.adicionarPokemon(adapter, pokemonEscolhido, (lastPokemon-firstPokemon)+1, llnLoading)
-                    }
-                }
-            })
-        }
-    }
-
-    fun verificarPokemonsSalvo() : Boolean{
-        return PokemonApplication.instance.sharedPreferences.getBoolean("geracao ${PokemonSingleton.geracaoSelecionada} salva", false)
-    }
-
-    fun carregarPokemons(){
-        Thread(Runnable {
-            var json = PokemonApplication.instance.sharedPreferences.getString("lista ${PokemonSingleton.geracaoSelecionada} salva", null)
-            var type = object : TypeToken<MutableList<Pokemon?>>() {}.type
-            var lista : MutableList<Pokemon?> = Gson().fromJson(json, type)
-
-            PokemonSingleton.listaPokemon = lista
-
-            runOnUiThread {
-                receberPokemons()
-            }
-        }).start()
+        Toast.makeText(baseContext, "Carregando ${sharedPreferencesPokemon.texto}", Toast.LENGTH_SHORT).show()
+        drawer_layout.closeDrawer(GravityCompat.START)
+        verificarPokemonsArmazenados()
+        return false
     }
 }

@@ -74,11 +74,9 @@
 
         <ProgressBar
             android:id="@+id/loading"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="250dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:scaleY="4"
             android:visibility="visible" />
 
         <TextView
@@ -89,6 +87,7 @@
             android:fontFamily="@font/roboto"
             android:text="Carregando pokemon: ${pokemon}"
             android:textColor="#000000"
+            android:textAlignment="center"
             android:textStyle="bold" />
 
     </LinearLayout>
