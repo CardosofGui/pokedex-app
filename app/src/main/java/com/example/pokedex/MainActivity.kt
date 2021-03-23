@@ -131,7 +131,6 @@ class MainActivity : AppCompatActivity(), ClickAction {
     private fun onClickError(it: Int) {
         val pokemon = PokemonSingleton.listaPokemon[it]
 
-        val client = OkHttpClient().newBuilder().readTimeout(2, TimeUnit.MINUTES).connectTimeout(2, TimeUnit.MINUTES).build()
         val url = "https://pokeapi.co/api/v2/pokemon/${pokemon?.id}"
         val request = okhttp3.Request.Builder().url(url).build()
 
@@ -176,8 +175,6 @@ class MainActivity : AppCompatActivity(), ClickAction {
         lastPokemon: Int
     ){
         Thread(Runnable {
-            val client = OkHttpClient().newBuilder().readTimeout(2, TimeUnit.MINUTES).connectTimeout(2, TimeUnit.MINUTES).build()
-
             for (index in firstPokemon..lastPokemon) {
                 val url = "https://pokeapi.co/api/v2/pokemon/${index}"
                 val request = okhttp3.Request.Builder().url(url).build()
@@ -239,19 +236,35 @@ class MainActivity : AppCompatActivity(), ClickAction {
         }).start()
     }
 
-    private fun salvarPokemons(listPokemon : List<Pokemon?>){
-        SharedPreferencesPokemon.values().forEach {
-            var list = listPokemon.filter { pokemon: Pokemon? ->
-                pokemon!!.id >= it.firstPokemon && pokemon!!.id <= it.lastPokemon }
+    private fun salvarPokemons(listPokemon : List<Pokemon?>, trocarDados : Boolean = false){
+        if(trocarDados){
+            var jsonTexto = Gson().toJson(listPokemon)
 
-            var jsonTexto = Gson().toJson(list)
-
-            PokemonApplication.instance.adicionarPreferences.putBoolean("geracao ${it.geracao} salva", true)
-            PokemonApplication.instance.adicionarPreferences.putString("lista ${it.geracao} salva", jsonTexto)
+            PokemonApplication.instance.adicionarPreferences.putBoolean("geracao ${PokemonSingleton.geracaoSelecionada} salva", true)
+            PokemonApplication.instance.adicionarPreferences.putString("lista ${PokemonSingleton.geracaoSelecionada} salva", jsonTexto)
             PokemonApplication.instance.adicionarPreferences.apply()
+            carregarPokemons()
+        }else{
+            SharedPreferencesPokemon.values().forEach {
+                var list = listPokemon.filter { pokemon: Pokemon? ->
+                    pokemon!!.id >= it.firstPokemon && pokemon!!.id <= it.lastPokemon }
 
-            if(it.geracao == 1){
-                carregarPokemons()
+                var i = 0
+                list.forEach {
+                        pokemon : Pokemon? ->
+                    pokemon?.setPositionPoke(i)
+                    i++
+                }
+
+                var jsonTexto = Gson().toJson(list)
+
+                PokemonApplication.instance.adicionarPreferences.putBoolean("geracao ${it.geracao} salva", true)
+                PokemonApplication.instance.adicionarPreferences.putString("lista ${it.geracao} salva", jsonTexto)
+                PokemonApplication.instance.adicionarPreferences.apply()
+
+                if(it.geracao == 1){
+                    carregarPokemons()
+                }
             }
         }
 
@@ -265,12 +278,6 @@ class MainActivity : AppCompatActivity(), ClickAction {
             if(this.size == limit){
                 loading.visibility = View.GONE
                 this.sortBy { it?.id }
-
-                var i = 0
-                this.forEach {
-                    it?.setPositionPoke(i)
-                    i++
-                }
 
                 salvarPokemons(this)
             }
@@ -301,5 +308,9 @@ class MainActivity : AppCompatActivity(), ClickAction {
         drawer_layout.closeDrawer(GravityCompat.START)
         verificarPokemonsArmazenados()
         return false
+    }
+
+    companion object {
+        val client = OkHttpClient().newBuilder().readTimeout(2, TimeUnit.MINUTES).connectTimeout(2, TimeUnit.MINUTES).build()
     }
 }

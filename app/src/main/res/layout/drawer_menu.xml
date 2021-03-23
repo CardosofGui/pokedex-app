@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#ED1E24"
+        android:background="#CD1112"
         app:headerLayout="@layout/header"
         app:itemTextAppearance="@style/TextAppearance.AppCompat.Medium"
         app:itemTextColor="#000000"
