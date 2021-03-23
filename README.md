@@ -29,4 +29,4 @@
 # Melhorias Futuras
 * Melhorar código (principalmente alguns códigos desnecessarios e comentar linhas)
 * Melhorar conexão com a API
-* Deixar o APP compativel a partir da API 23
+* Deixar o APP compativel a partir da API 23 ✔
