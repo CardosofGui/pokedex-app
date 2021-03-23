@@ -5,7 +5,7 @@
     android:id="@+id/llnPokemonList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#ED1E24"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -13,17 +13,18 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#979797" />
+        android:background="#9C0101" />
 
     <LinearLayout
         android:id="@+id/llnBusca"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="#A3A3A3"
+        android:background="#ED1E24"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="5dp"
+        >
 
         <EditText
             android:id="@+id/nomeBuscaPoke"

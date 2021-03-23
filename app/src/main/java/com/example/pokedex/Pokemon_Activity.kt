@@ -34,6 +34,7 @@ class Pokemon_Activity : AppCompatActivity() {
 
         idPokemon = intent.getIntExtra("idPokemon", 1)
 
+
         setupMoves()
         setupActivity()
         setupRecyclerView()
@@ -112,31 +113,32 @@ class Pokemon_Activity : AppCompatActivity() {
 
         val pokemonSelecionado = PokemonSingleton.listaPokemon[idPokemon]!!
 
-        Picasso.get().load(pokemonSelecionado.sprites.front_default).into(imgExibirPokemon)
+        Picasso.get().load(pokemonSelecionado.sprites?.front_default).into(imgExibirPokemon)
         txtExibirNomePokemon.text = pokemonSelecionado.name.capitalize()
-        txtExibirType1.text = pokemonSelecionado.types[0].type.name.capitalize()
+        txtExibirType1.text = pokemonSelecionado.types?.get(0)?.type?.name?.capitalize() ?: "No Type"
 
         TypeEnum.values().forEach {
-            if(it.type == pokemonSelecionado.types[0].type.name){
+            if(it.type == pokemonSelecionado.types?.get(0)?.type?.name ?: "fire"){
                 txtExibirType1.setBackgroundColor(ContextCompat.getColor(this, it.color))
-                txtExibirType1.text = pokemonSelecionado.types[0].type.name.capitalize()
+                txtExibirType1.text = pokemonSelecionado.types?.get(0)?.type?.name?.capitalize() ?: "No Type"
             }
         }
 
-        if(pokemonSelecionado.types.size == 2){
-            txtExibirType2.text = pokemonSelecionado.types[1].type.name.capitalize()
+        if(pokemonSelecionado.types?.size ?: 0 == 2){
+            txtExibirType2.text = pokemonSelecionado.types?.get(1)?.type?.name?.capitalize() ?: "No Type"
 
             TypeEnum.values().forEach {
-                if(it.type == pokemonSelecionado.types[1].type.name){
+                if(it.type == pokemonSelecionado.types?.get(1)?.type?.name ?: "No Type"){
                     txtExibirType2.setBackgroundColor(ContextCompat.getColor(this, it.color))
-                    txtExibirType2.text = pokemonSelecionado.types[1].type.name.capitalize()
+                    txtExibirType2.text =
+                        pokemonSelecionado.types?.get(1)?.type?.name?.capitalize() ?: "No Type"
                 }
             }
         }else{
             txtExibirType2.visibility = View.GONE
         }
 
-        if(pokemonSelecionado.moves?.size == 0){
+        if(pokemonSelecionado.moves?.size == 0 || pokemonSelecionado.moves?.size == null){
             txtSemMove.visibility = View.VISIBLE
         }
     }

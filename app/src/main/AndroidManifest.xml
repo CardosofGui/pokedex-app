@@ -13,9 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Pokedex">
         <activity android:name=".Pokemon_Activity"></activity>
-        <activity android:name=".splash_screen">
-
-        </activity>
         <activity android:name=".MainActivity"><intent-filter>
             <action android:name="android.intent.action.MAIN" />
 

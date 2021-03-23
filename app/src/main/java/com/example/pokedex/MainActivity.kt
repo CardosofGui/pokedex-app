@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -27,6 +29,8 @@ import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import java.io.IOException
+import java.lang.Exception
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         val drawerLayout = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+
 
         val toogle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer)
         drawerLayout.addDrawerListener(toogle)
@@ -167,7 +172,7 @@ class MainActivity : AppCompatActivity() {
         var nome: String = nomeBuscaPoke.text.toString().toLowerCase()
 
         if (!nome.isNullOrEmpty()) {
-            filtrada = PokemonSingleton.listaPokemon.filter { it?.name!!.contains(nome) }
+            filtrada = PokemonSingleton.listaPokemon.filter { it?.name!!.contains(nome) || it?.id!!.toString().contains(nome) }
         }else{
             filtrada = PokemonSingleton.listaPokemon
         }
@@ -230,35 +235,39 @@ class MainActivity : AppCompatActivity() {
         for (i in firstPokemon..lastPokemon) {
             val url = "https://pokeapi.co/api/v2/pokemon/${i}"
 
-            val client = OkHttpClient()
+            val client = OkHttpClient().newBuilder().readTimeout(5, TimeUnit.MINUTES).connectTimeout(5, TimeUnit.MINUTES).build()
             val request = okhttp3.Request.Builder().url(url).build()
             client.dispatcher.maxRequestsPerHost = 50
 
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-
+                    Log.d("Erro Conexao", "${i} - $e")
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    val body = response?.body?.string()
-                    val gson = GsonBuilder().create()
-                    val pokemonEscolhido = gson.fromJson(body, Pokemon::class.java)
+                    try {
+                        val body = response?.body?.string()
+                        val gson = GsonBuilder().create()
+                        val pokemonEscolhido = gson.fromJson(body, Pokemon::class.java)
 
-                    runOnUiThread {
-                        loading.progress = PokemonSingleton.listaPokemon.size
-                        txtLoading.text = "Carregando pokemon: ${pokemonEscolhido.name.capitalize()}"
+                        runOnUiThread {
+                            loading.progress = PokemonSingleton.listaPokemon.size
+                            txtLoading.text = "Carregando pokemon: ${pokemonEscolhido.name.capitalize()}"
 
-                        var limit = 0
-                        if(PokemonSingleton.geracaoSelecionada == 1){
-                            limit = lastPokemon
-                        }else{
-                            limit = (lastPokemon-firstPokemon)+1
-
+                            PokemonSingleton.adicionarPokemon(adapter, pokemonEscolhido, (lastPokemon-firstPokemon)+1, llnLoading)
                         }
+                    }catch (e : Exception){
+                        Log.d("Erro poke", "${i} - $e")
 
-                        PokemonSingleton.adicionarPokemon(adapter, pokemonEscolhido, limit, llnLoading)
+                        val pokemonEscolhido = Pokemon(
+                            i,
+                            "Pokemon não encontado",
+                            null,
+                            null,
+                            null
+                        )
+                        PokemonSingleton.adicionarPokemon(adapter, pokemonEscolhido, (lastPokemon-firstPokemon)+1, llnLoading)
                     }
-
                 }
             })
         }
