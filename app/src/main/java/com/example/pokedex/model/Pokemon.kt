@@ -1,7 +1,5 @@
 package com.example.pokedex.model
 
-import android.os.Parcelable
-
 class Pokemon(val id: Int, val name : String, val types : List<index>?, val sprites: sprites?, val moves : List<IndexMoves>?){
     var position = 0
 

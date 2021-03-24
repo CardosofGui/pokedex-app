@@ -1,27 +1,21 @@
-package com.example.pokedex
+package com.example.pokedex.features.pokemon_details
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pokedex.R
-import com.example.pokedex.adapter.MoveAdapter
-import com.example.pokedex.adapter.PokemonAdapter
+import com.example.pokedex.features.pokemon_details.adapter.MoveAdapter
 import com.example.pokedex.model.Moves
 import com.example.pokedex.model.TypeEnum
 import com.example.pokedex.singleton.PokemonSingleton
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_pokemon_.*
-import kotlinx.android.synthetic.main.pokemon_grid.view.*
 
 class Pokemon_Activity : AppCompatActivity() {
 
@@ -99,7 +93,11 @@ class Pokemon_Activity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        val adapter = MoveAdapter(this, listaMoves)
+        val adapter =
+            MoveAdapter(
+                this,
+                listaMoves
+            )
         recyclerViewMoves.layoutManager = GridLayoutManager(this, 2)
 
         recyclerViewMoves.adapter = adapter

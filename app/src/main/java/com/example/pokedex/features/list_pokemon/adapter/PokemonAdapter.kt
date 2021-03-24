@@ -1,34 +1,31 @@
-package com.example.pokedex.adapter
+package com.example.pokedex.features.list_pokemon.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedex.R
 import com.example.pokedex.model.Pokemon
 import com.example.pokedex.model.TypeEnum
-import com.example.pokedex.model.type
-import com.example.pokedex.singleton.PokemonSingleton
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.pokemon_grid.view.*
-import java.lang.reflect.Type
 
 class PokemonAdapter(
     private val context : Context,
     private val listaPokemon: List<Pokemon?>,
-    private val onClick : ((Int) -> Unit),
-    private val onClickError : ((Int) -> Unit)
+    private val onClickExibirPokemon : ((Int) -> Unit),
+    private val onClickPokemonError : ((Int) -> Unit)
 ) : RecyclerView.Adapter<PokemonViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.pokemon_grid,parent,false)
-        return PokemonViewHolder(view)
+        return PokemonViewHolder(
+            view
+        )
     }
 
     override fun getItemCount(): Int = listaPokemon.size
@@ -74,9 +71,20 @@ class PokemonAdapter(
         view.typePokemon1.text = pokemonTypeMain?.capitalize()
 
         if(pokemon?.types == null){
-            view.llnPokemon.setOnClickListener { onClickError(position) }
+            view.typePokemon1.text = "CLIQUE PARA TENTAR BAIXAR NOVAMENTE"
+            view.typePokemon1.setTextColor(Color.RED)
+            view.llnPokemon.setOnClickListener {
+                var animation = AnimationUtils.loadAnimation(context, R.anim.animation)
+                view.llnPokemon.startAnimation(animation)
+                onClickPokemonError(pokemon!!.position)
+            }
         }else{
-            view.llnPokemon.setOnClickListener { onClick(pokemon!!.position) }
+            view.llnPokemon.setOnClickListener {
+                var animation = AnimationUtils.loadAnimation(context, R.anim.animation)
+                view.llnPokemon.startAnimation(animation)
+
+                onClickExibirPokemon(pokemon!!.position)
+            }
         }
     }
 }

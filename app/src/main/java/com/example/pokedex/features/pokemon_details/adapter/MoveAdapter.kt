@@ -1,18 +1,13 @@
-package com.example.pokedex.adapter
+package com.example.pokedex.features.pokemon_details.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedex.R
 import com.example.pokedex.model.Moves
-import com.example.pokedex.model.Pokemon
-import com.example.pokedex.model.TypeEnum
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.move_grid.view.*
-import kotlinx.android.synthetic.main.pokemon_grid.view.*
 
 class MoveAdapter(
     private val context: Context,
@@ -22,7 +17,9 @@ class MoveAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoveViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.move_grid, parent, false)
-        return MoveViewHolder(view)
+        return MoveViewHolder(
+            view
+        )
     }
 
     override fun getItemCount(): Int = listMove.size

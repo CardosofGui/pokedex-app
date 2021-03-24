@@ -1,4 +1,4 @@
-package com.example.pokedex
+package com.example.pokedex.features.list_pokemon
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -14,8 +14,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pokedex.adapter.PokemonAdapter
+import com.example.pokedex.R
+import com.example.pokedex.features.list_pokemon.adapter.PokemonAdapter
 import com.example.pokedex.application.PokemonApplication
+import com.example.pokedex.features.pokemon_details.Pokemon_Activity
 import com.example.pokedex.model.ClickAction
 import com.example.pokedex.model.Pokemon
 import com.example.pokedex.model.SharedPreferencesPokemon
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity(), ClickAction {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_menu)
 
-        verificarPokemonsArmazenados()
+        verificarPokemonsArmazenadosSharedPreferences()
         initDrawer()
         buscadorAutomatico()
         setupActionBarName()
@@ -51,7 +53,10 @@ class MainActivity : AppCompatActivity(), ClickAction {
     private fun initDrawer() {
         setSupportActionBar(toolbar)
 
-        val toogle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.open_drawer, R.string.close_drawer)
+        val toogle = ActionBarDrawerToggle(this, drawer_layout, toolbar,
+            R.string.open_drawer,
+            R.string.close_drawer
+        )
         drawer_layout.addDrawerListener(toogle)
         toogle.syncState()
 
@@ -106,13 +111,13 @@ class MainActivity : AppCompatActivity(), ClickAction {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                buscarPokemons()
+                filtrarPokemons()
             }
 
         })
     }
 
-    private fun buscarPokemons() {
+    private fun filtrarPokemons() {
         var nome: String = nomeBuscaPoke.text.toString().toLowerCase()
         var listaFiltrada : List<Pokemon?> = PokemonSingleton.listaPokemon
 
@@ -123,37 +128,49 @@ class MainActivity : AppCompatActivity(), ClickAction {
             }
         }
 
-        pokemonAdapter = PokemonAdapter(baseContext, listaFiltrada, onClick = { onClickRecycler(it) }, onClickError = { onClickError(it) })
+        pokemonAdapter = PokemonAdapter(baseContext, listaFiltrada, onClickExibirPokemon = { onClickRecycler(it) }, onClickPokemonError = { onClickPokemonErro(it) })
         recyclerViewPokemon.layoutManager = LinearLayoutManager(this)
         recyclerViewPokemon.adapter = pokemonAdapter
     }
 
-    private fun onClickError(it: Int) {
+    private fun onClickPokemonErro(it: Int) {
         val pokemon = PokemonSingleton.listaPokemon[it]
 
         val url = "https://pokeapi.co/api/v2/pokemon/${pokemon?.id}"
         val request = okhttp3.Request.Builder().url(url).build()
 
-        try {
-            val response = client.newCall(request).execute()
-            val body = response?.body?.string()
-            val gson = GsonBuilder().create()
-            val pokemonEscolhido = gson.fromJson(body, Pokemon::class.java)
-            PokemonSingleton.listaPokemon[it] = pokemonEscolhido
-            pokemonAdapter.notifyDataSetChanged()
-        }catch (e : Exception){
-            Toast.makeText(baseContext, "Pokemon Não Encontrado \nTente novamente outra hora", Toast.LENGTH_LONG).show()
-        }
+        client.newCall(request).enqueue(object : Callback{
+            override fun onFailure(call: Call, e: IOException) {
+                Toast.makeText(baseContext, "Erro de Conexão \nTente novamente outra hora", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                try {
+                    val response = client.newCall(request).execute()
+                    val body = response?.body?.string()
+                    val gson = GsonBuilder().create()
+                    val pokemonEscolhido = gson.fromJson(body, Pokemon::class.java)
+                    runOnUiThread {
+                        PokemonSingleton.listaPokemon[it] = pokemonEscolhido
+                        pokemonAdapter.notifyDataSetChanged()
+                    }
+                }catch (e : Exception){
+                    runOnUiThread {
+                        Toast.makeText(baseContext, "Pokemon Não Encontrado \nTente novamente outra hora", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        })
     }
 
-    private fun verificarPokemonsArmazenados(){
+    private fun verificarPokemonsArmazenadosSharedPreferences(){
         PokemonSingleton.listaPokemon.clear()
         nomeBuscaPoke.setText("")
         setupActionBarName()
 
-        if(verificarGeracaoSalva()){
+        if(verificarDadosBaixados()){
             // Se já tiver essa geração armazenada ele irá carregar os dados
-            carregarPokemons()
+            carregarPokemonsSharedPreferences()
         }else{
             // Caso não tenha salva será solicitado a API os dados dos Pokemons
             llnLoading.visibility = View.VISIBLE
@@ -214,11 +231,11 @@ class MainActivity : AppCompatActivity(), ClickAction {
         }).start()
     }
 
-    private fun verificarGeracaoSalva() : Boolean{
+    private fun verificarDadosBaixados() : Boolean{
         return PokemonApplication.instance.sharedPreferences.getBoolean("geracao ${PokemonSingleton.geracaoSelecionada} salva", false)
     }
 
-    private fun carregarPokemons(){
+    private fun carregarPokemonsSharedPreferences(){
         llnLoading.visibility = View.VISIBLE
         txtLoading.visibility = View.GONE
 
@@ -230,20 +247,20 @@ class MainActivity : AppCompatActivity(), ClickAction {
             PokemonSingleton.listaPokemon = lista
 
             runOnUiThread {
-                buscarPokemons()
+                filtrarPokemons()
                 llnLoading.visibility = View.GONE
             }
         }).start()
     }
 
-    private fun salvarPokemons(listPokemon : List<Pokemon?>, trocarDados : Boolean = false){
+    private fun salvarPokemonsSharedPreferences(listPokemon : List<Pokemon?>, trocarDados : Boolean = false){
         if(trocarDados){
             var jsonTexto = Gson().toJson(listPokemon)
 
             PokemonApplication.instance.adicionarPreferences.putBoolean("geracao ${PokemonSingleton.geracaoSelecionada} salva", true)
             PokemonApplication.instance.adicionarPreferences.putString("lista ${PokemonSingleton.geracaoSelecionada} salva", jsonTexto)
             PokemonApplication.instance.adicionarPreferences.apply()
-            carregarPokemons()
+            carregarPokemonsSharedPreferences()
         }else{
             SharedPreferencesPokemon.values().forEach {
                 var list = listPokemon.filter { pokemon: Pokemon? ->
@@ -263,7 +280,7 @@ class MainActivity : AppCompatActivity(), ClickAction {
                 PokemonApplication.instance.adicionarPreferences.apply()
 
                 if(it.geracao == 1){
-                    carregarPokemons()
+                    carregarPokemonsSharedPreferences()
                 }
             }
         }
@@ -279,13 +296,13 @@ class MainActivity : AppCompatActivity(), ClickAction {
                 loading.visibility = View.GONE
                 this.sortBy { it?.id }
 
-                salvarPokemons(this)
+                salvarPokemonsSharedPreferences(this)
             }
         }
     }
 
     override fun onResume() {
-        buscarPokemons()
+        filtrarPokemons()
         super.onResume()
     }
 
@@ -306,7 +323,7 @@ class MainActivity : AppCompatActivity(), ClickAction {
 
         Toast.makeText(baseContext, "Carregando ${sharedPreferencesPokemon.texto}", Toast.LENGTH_SHORT).show()
         drawer_layout.closeDrawer(GravityCompat.START)
-        verificarPokemonsArmazenados()
+        verificarPokemonsArmazenadosSharedPreferences()
         return false
     }
 

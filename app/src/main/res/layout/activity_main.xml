@@ -5,22 +5,22 @@
     android:id="@+id/llnPokemonList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ED1E24"
+    android:background="@color/background_main_color"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".features.list_pokemon.MainActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#9C0101" />
+        android:background="@color/toolbar_color" />
 
     <LinearLayout
         android:id="@+id/llnBusca"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="#ED1E24"
+        android:background="@color/search_color"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="5dp"
@@ -91,6 +91,7 @@
             android:textStyle="bold" />
 
     </LinearLayout>
+
 
     <FrameLayout
         android:layout_width="match_parent"

@@ -27,4 +27,7 @@
     <color name="rock">#8B3E21</color>
     <color name="steel">#42BD94</color>
     <color name="water">#86A8FC</color>
+    <color name="background_main_color">#DFD54054</color>
+    <color name="toolbar_color">#C3182F</color>
+    <color name="search_color">#D7253D</color>
 </resources>
