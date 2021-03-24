@@ -6,23 +6,23 @@
 <table>
     <td>
         <p align="center">Tela de carregamento</p>
-        <img src="https://i.ibb.co/znXCmFM/Whats-App-Image-2021-03-20-at-21-30-22-4.jpg" alt="Your image title" width="250" />
+        <img src="https://i.ibb.co/D4S7tVh/Whats-App-Image-2021-03-24-at-03-15-54-4.jpg" alt="Your image title" width="250" />
     </td>
     <td>
         <p align="center">Tela inicial</p>
-        <img src="https://i.ibb.co/f1FCQz1/Whats-App-Image-2021-03-20-at-21-30-22-3.jpg" alt="Your image title" width="250" />
+        <img src="https://i.ibb.co/CWQhSFT/Whats-App-Image-2021-03-24-at-03-15-54.jpg" alt="Your image title" width="250" />
     </td>
     <td>
         <p align="center">Buscando pokemon</p>
-        <img src="https://i.ibb.co/Ln0Pm82/Whats-App-Image-2021-03-20-at-21-30-22-2.jpg" alt="Your image title" width="250" />
+        <img src="https://i.ibb.co/0rWQyxz/Whats-App-Image-2021-03-24-at-03-15-54-3.jpg" alt="Your image title" width="250" />
     </td>
     <td>
         <p align="center">Menu gerações</p>
-        <img src="https://i.ibb.co/BKjWjDb/Whats-App-Image-2021-03-20-at-21-30-22.jpg" alt="Your image title" width="250" />
+        <img src="https://i.ibb.co/4YbGkZp/Whats-App-Image-2021-03-24-at-03-15-54-1.jpg" alt="Your image title" width="250" />
     </td>
     <td>
         <p align="center">Tela pokemon</p>
-        <img src="https://i.ibb.co/nB0FH63/Whats-App-Image-2021-03-20-at-21-30-22-1.jpg" alt="Your image title" width="250" />
+        <img src="https://i.ibb.co/F0cqqDL/Whats-App-Image-2021-03-24-at-03-15-54-2.jpg" alt="Your image title" width="250" />
     </td>
 </table>
 
