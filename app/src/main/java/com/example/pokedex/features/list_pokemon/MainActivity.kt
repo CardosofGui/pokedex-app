@@ -206,7 +206,7 @@ class MainActivity : AppCompatActivity(), ClickAction {
                             val body = response?.body?.string()
                             val gson = GsonBuilder().create()
                             val pokemonEscolhido = gson.fromJson(body, Pokemon::class.java)
-                            PokemonSingleton.listaPokemon.adicionarPokemon(pokemonAdapter, pokemonEscolhido, (lastPokemon-firstPokemon)+1, llnLoading)
+                            PokemonSingleton.listaPokemon.adicionarPokemon(pokemonEscolhido, (lastPokemon-firstPokemon)+1, llnLoading)
 
                             runOnUiThread {
                                 txtLoading.text = "Carregando pokemon: ${pokemonEscolhido.name.capitalize()} \n ${PokemonSingleton.listaPokemon.size}/898"
@@ -223,7 +223,7 @@ class MainActivity : AppCompatActivity(), ClickAction {
                             )
 
 
-                            PokemonSingleton.listaPokemon.adicionarPokemon(pokemonAdapter, pokemonEscolhido, (lastPokemon-firstPokemon)+1, llnLoading)
+                            PokemonSingleton.listaPokemon.adicionarPokemon(pokemonEscolhido, (lastPokemon-firstPokemon)+1, llnLoading)
                         }
                     }
                 })
@@ -288,7 +288,7 @@ class MainActivity : AppCompatActivity(), ClickAction {
         drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     }
 
-    private fun MutableList<Pokemon?>.adicionarPokemon(adapter: PokemonAdapter, pokemon: Pokemon, limit : Int, loading : LinearLayout){
+    private fun MutableList<Pokemon?>.adicionarPokemon(pokemon: Pokemon, limit : Int, loading : LinearLayout){
         runOnUiThread {
             this.add(pokemon)
 
